@@ -1,0 +1,27 @@
+//@version=5
+indicator("MACD + RSI", overlay=true)
+
+//MACD settings
+fastLength = input(title="Fast Length", type=input.integer, defval=12)
+slowLength = input(title="Slow Length", type=input.integer, defval=26)
+signalLength = input(title="Signal Smoothing", type=input.integer, defval=9)
+src = input(title="Source", type=input.source, defval=close)
+macd = ema(src, fastLength) - ema(src, slowLength)
+signal = sma(macd, signalLength)
+hist = macd - signal
+
+//RSI settings
+rsiLength = input(title="RSI Length", type=input.integer, defval=14)
+rsiSrc = input(title="RSI Source", type=input.source, defval=close)
+rsi = rsi(rsiSrc, rsiLength)
+
+//plot MACD and RSI
+plot(hist, title="MACD", color=color.red)
+plot(rsi, title="RSI", color=color.blue)
+
+//plot signal line
+plot(signal, title="Signal", color=color.yellow)
+
+//plot overbought/oversold levels
+hline(70, title="Overbought", color=color.gray)
+hline(30, title="Oversold", color=color.gray)
